@@ -5,7 +5,7 @@ module.exports.findvalues = async (databaseName, collectionName, query, projecti
     let { collection, client } = await connection.getConnection(databaseName, collectionName);
     let results = await collection.find(query, projection).skip(parseInt(skip)).limit(parseInt(limit)).toArray();
     //Close collection
-    await connection.closeConnection(client);
+    // await connection.closeConnection(client);
     return results;
 }
 
@@ -14,7 +14,7 @@ module.exports.findvalue = async (databaseName, collectionName, query, projectio
     let { collection, client } = await connection.getConnection(databaseName, collectionName);
     let results = await collection.findOne(query, projection).toJSON();
     //Close collection
-    connection.closeConnection(client);
+    // connection.closeConnection(client);
     return results;
 }
 
@@ -24,7 +24,7 @@ module.exports.insertvalues = async (databaseName, collectionName, values) => {
     let { collection, client } = await connection.getConnection(databaseName, collectionName);
     let results = await collection.insertMany(Array.isArray(values) ? values : [values]);
     //Close collection
-    connection.closeConnection(client);
+    // connection.closeConnection(client);
     return results;
 }
 

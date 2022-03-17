@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     skip
   );
 
-  res.status(201).send(results);
+  res.status(200).send(results);
 });
 
 router.post("/", async (req, res) => {
@@ -24,13 +24,14 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/bulk", async (req, res) => {
-  let { noOfCalls = 1000 } = req.query;
+  let { noOfCalls = 500 } = req.query;
   let list = [];
   for (var i = 0; i < noOfCalls; i++) {
-    list.push(axios.get("http://127.0.0.1:3000/?limit=100"));
+    list.push(axios.get("http://127.0.0.1:3003/?limit=100"));
   }
   axios .all(list)
     .then((data) => {
+      console.log(data)
       res.status(200).send({ match: "done" });
     })
     .catch((err) => {

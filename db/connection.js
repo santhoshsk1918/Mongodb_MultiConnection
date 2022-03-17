@@ -8,30 +8,32 @@ const client = new MongoClient(connectionString, {
 
 let connected = false;
 
-// const createConnection = async () => {
-//     try{
-//         if(connected) {
-//             return;
-//         } else {
-//             connection = await client.connect();
-//             connected = true;
-//             return;
-//         }
-//     } catch (err) {
-//         console.error("Error in connecting to db", err);
-//     }
-// }
+module.exports.createConnection = async () => {
+    try{
+        if(connected) {
+            return;
+        } else {
+            console.log("Connection");
+            connection = await client.connect();
+            connected = true;
+            return;
+        }
+    } catch (err) {
+        console.error("Error in connecting to db", err);
+    }
+}
 
 module.exports.getConnection = async (database, collectionName) => {
-    await client.connect(); //TLS Handshake
-    // await createConnection();
+    // await client.connect(); //TLS Handshake
+    await this.createConnection();
     const db = client.db(database);
     
     return { collection: db.collection(collectionName), client };
 };
 
 module.exports.closeConnection = async (currentClient) => {
-    currentClient.close();
-    // client.close();
+    // currentClient.close();
+    console.log("Closing Connection")
+    client.close();
     return;
 }

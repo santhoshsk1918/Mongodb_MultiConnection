@@ -7,12 +7,14 @@
 var app = require('../app');
 var debug = require('debug')('p1:server');
 var http = require('http');
+const connections = require("../db/connection");
 
+connections.createConnection();
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3003');
 app.set('port', port);
 
 /**
@@ -78,6 +80,22 @@ function onError(error) {
       throw error;
   }
 }
+
+process.on('exit', function () {
+  connections.closeConnection()
+});
+
+// catch ctrl+c event and exit normally
+process.on('SIGINT', function () {
+  connections.closeConnection()
+  process.exit(2); 
+});
+
+//catch uncaught exceptions, trace, then exit normally
+process.on('uncaughtException', function(e) {
+  connections.closeConnection()
+  process.exit(99);
+});
 
 /**
  * Event listener for HTTP server "listening" event.
